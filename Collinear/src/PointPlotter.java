@@ -22,11 +22,15 @@ public class PointPlotter {
         String filename = args[0];
         In in = new In(filename);
         int N = in.readInt();
+        Point prev = null;
         for (int i = 0; i < N; i++) {
             int x = in.readInt();
             int y = in.readInt();
             Point p = new Point(x, y);
             p.draw();
+            if (prev != null)
+                prev.drawTo(p);
+            prev = p;
         }
 
         // display to screen all at once
