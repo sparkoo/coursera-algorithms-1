@@ -1,13 +1,17 @@
-
 public class Subset {
     public static void main(String[] args) {
-        Deque<String> d = new Deque<String>();
-        d.addFirst("prvni");
-        d.addFirst("druhy");
-        d.addLast("posledni");
-        d.addFirst("treti");
-        System.out.println("rf: " + d.removeLast());
-        d.printAll();
+        RandomizedQueue<String> rq = new RandomizedQueue<String>();
+
+        // read strings from std input:
+        while (!StdIn.isEmpty())
+        {
+             String s = StdIn.readString();
+             rq.enqueue(s);
+        }
+
+        int k = Integer.parseInt(args[0]);
+        for (int i = 0; i < k; i++) {
+            StdOut.println(rq.dequeue());
+        }
     }
-    
 }
