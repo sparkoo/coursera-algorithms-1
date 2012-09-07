@@ -41,7 +41,8 @@ public class Point implements Comparable<Point> {
 
     // slope between this point and that point
     public double slopeTo(Point that) {
-        return (that.y - this.y) / (that.x - this.x);
+        double r = ((double)that.y - (double)this.y) / ((double)that.x - (double)this.x);
+        return r;
     }
 
     // is this point lexicographically smaller than that one?
@@ -60,5 +61,6 @@ public class Point implements Comparable<Point> {
     // unit test
     public static void main(String[] args) {
         /* YOUR CODE HERE */
+        new TestPoint();
     }
 }
