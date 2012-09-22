@@ -15,15 +15,15 @@ public class Point implements Comparable<Point> {
         this.y = y;
     }
     
-    private class Ordering implements Comparator<Point>{
-        public int compare(Point q1,Point q2){
-            if(q1.y < q2.y || ( q1.y == q2.y && q1.x < q2.x) ){
-                return -1 ; 
-            }else if(q1.y == q2.y && q1.x == q2.x){
-                return 0 ; 
-            }else{
-                return 1 ; 
-            }
+    private class Ordering implements Comparator<Point> {
+        public int compare(Point q1, Point q2) {
+            Point p = new Point(x, y);
+            double d = p.slopeTo(q1) - p.slopeTo(q2);
+            if (d > 0)
+                return -1;
+            if (d < 0)
+                return 1;
+            return 0;
         }
     }
 
@@ -41,15 +41,20 @@ public class Point implements Comparable<Point> {
 
     // slope between this point and that point
     public double slopeTo(Point that) {
-        double r = ((double)that.y - (double)this.y) / ((double)that.x - (double)this.x);
-        return r;
+        return ((double) that.y - (double) this.y) / ((double) that.x - (double) this.x);
     }
 
     // is this point lexicographically smaller than that one?
     // comparing y-coordinates and breaking ties by x-coordinates
     public int compareTo(Point that) {
         /* YOUR CODE HERE */
-        return SLOPE_ORDER.compare(this, that);
+        if(this.y < that.y || (this.y == that.y && this.x < that.x)){
+            return -1; 
+        } else if(this.y == that.y && this.x == that.x) {
+            return 0; 
+        } else {
+            return 1; 
+        }
     }
 
     // return string representation of this point
@@ -61,6 +66,5 @@ public class Point implements Comparable<Point> {
     // unit test
     public static void main(String[] args) {
         /* YOUR CODE HERE */
-        new TestPoint();
     }
 }

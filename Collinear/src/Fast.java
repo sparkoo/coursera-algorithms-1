@@ -10,30 +10,49 @@ public class Fast {
             y = in.readInt();
             points[i++] = new Point(x, y);
         }
-        Merge.sort(points);
         findCollinears(points);
     }
     
     private static void findCollinears(Point[] points) {
-        for (int k = 0; k < points.length; k++) {
-            Point p = points[k];
-            Double[] q = new Double[points.length - (k + 1)];
-            for (int i = k + 1; i < points.length; i++) {
-                q[i - (k + 1)] = p.slopeTo(points[i]);
+        for (int i = 0; i < points.length; i++) {
+            Point p = points[i];
+            Point[] q = new Point[points.length - (i + 1)];
+            int minus = 0;
+            for (int j = i; j < points.length; j++) {
+                if (i == j) {
+                    minus = (i + 1);
+                    continue;
+                }
+                q[j - minus] = points[j];
             }
-            Merge.sort(q);
+            Insertion.sort(q, p.SLOPE_ORDER);
+            /*for (int k = 0; k < q.length; k++)
+                StdOut.println(p.slopeTo(q[k]));
+            StdOut.println(" == ");
+            */
             int count = 0;
-            for (int i = 1; i < q.length; i++) {
-                if (q[i].equals(q[i - 1])) {
-                    count++;
-                } else {
+            for (int k = 1; k < q.length + 1; k++) {
+                if (k >= q.length) {
                     if (count >= 2) {
-                        for (int j = i - count - 1; j < i; j++) {
-                            StdOut.print(q[j] + " -> ");
+                        for (int l = 0; l <= count; l++) {
+                            StdOut.print(q[k - l - 1].toString() + " => ");
                         }
-                        StdOut.println();
+                        StdOut.println(p.toString());
+                        count = 0;
                     }
-                    count = 0;
+                } else {
+                    if (p.slopeTo(q[k]) == p.slopeTo(q[k - 1])) {
+                        //StdOut.println(p.slopeTo(q[k]) + " == " + p.slopeTo(q[k - 1]));
+                        count++;
+                    } else {
+                        if (count >= 2) {
+                            StdOut.print(p.toString());
+                            for (int l = 0; l <= count; l++)
+                                StdOut.print(" => " + q[k - l - 1].toString());
+                            StdOut.println();
+                            count = 0;
+                        }
+                    }
                 }
             }
         }

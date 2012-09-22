@@ -21,7 +21,11 @@ public class Brute {
                     if (points[i].slopeTo(points[j]) == points[i].slopeTo(points[k])) {
                         for (int l = k + 1; l < points.length; l++) {
                             if (points[i].slopeTo(points[k]) == points[i].slopeTo(points[l])) {
-                                StdOut.println(points[i].toString() + " -> " + points[j].toString() + " -> " + points[k].toString() + " -> " + points[l].toString());
+                                String p = points[i].toString();
+                                String q = points[j].toString();
+                                String r = points[k].toString();
+                                String s = points[l].toString();
+                                StdOut.println(p + " -> " + q + " -> " + r + " -> " + s);
                             }
                         }
                     }
