@@ -13,6 +13,10 @@ public class Percolation {
 
     /* create n-by-n grid, with all sites blocked */
     public Percolation(int n) {
+        if (n <= 0) {
+            throw new IllegalArgumentException("n must be > 0");
+        }
+
         this.n = n;
         this.n2 = n * n;
         uf = new WeightedQuickUnionUF((n2) + 2);
