@@ -4,3 +4,5 @@
 *.jar
 *.zip
 *.settings/
+out/
+lesson_data/
