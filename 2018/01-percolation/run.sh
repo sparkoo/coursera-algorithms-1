@@ -5,6 +5,8 @@ set -x
 JAVA=java
 JAVAC=javac
 
+SEP=";"
+
 OUT_DIR=out/
 LIBS_DIR=../libs
 DATA_DIR=lesson_data/percolation
@@ -18,6 +20,6 @@ javac -cp ${ALGS4JAR} -d out src/*.java ${DATA_DIR}/*.java
 ls -l out
 
 
-#java -cp "${ALGS4JAR};${OUT_DIR}" InteractivePercolationVisualizer 1
-# java -cp "${ALGS4JAR};${OUT_DIR}" PercolationVisualizer ${DATA_DIR}/input1.txt
- java -cp "${ALGS4JAR};${OUT_DIR}" PercolationStats 200 100
+#java -cp "${ALGS4JAR}${SEP}${OUT_DIR}" InteractivePercolationVisualizer 1
+#java -cp "${ALGS4JAR}${SEP}${OUT_DIR}" PercolationVisualizer ${DATA_DIR}/input1.txt
+java -cp "${ALGS4JAR}${SEP}${OUT_DIR}" PercolationStats 200 100
