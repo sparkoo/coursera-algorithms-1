@@ -1,5 +1,6 @@
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
+// TODO: fix backwash without 2nd WeightedQuickUnionUF `ufTop`
 public class Percolation {
     private final int n;
     private final int n2;
