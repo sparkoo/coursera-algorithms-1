@@ -1,10 +1,10 @@
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
-// TODO: fix backwash
 public class Percolation {
     private final int n;
     private final int n2;
     private final WeightedQuickUnionUF uf;
+    private final WeightedQuickUnionUF ufTop;
     private final boolean[] field;
     private final int top;
     private final int bottom;
@@ -20,6 +20,7 @@ public class Percolation {
         this.n = n;
         this.n2 = n * n;
         uf = new WeightedQuickUnionUF((n2) + 2);
+        ufTop = new WeightedQuickUnionUF((n2) + 1);
         field = new boolean[n2];
         top = n2;
         bottom = n2 + 1;
@@ -43,6 +44,7 @@ public class Percolation {
     private void connectFakeTopAndBottom(int i) {
         if (i < n) {
             uf.union(i, top);
+            ufTop.union(i, top);
         }
         if (i > n2 - n - 1) {
             uf.union(i, bottom);
@@ -55,21 +57,25 @@ public class Percolation {
         // top
         if (row >= 2 && isOpen(row - 1, col)) {
             uf.union(calculateIndex(row - 1, col), i);
+            ufTop.union(calculateIndex(row - 1, col), i);
         }
 
         // bottom
         if (row < n && isOpen(row + 1, col)) {
             uf.union(calculateIndex(row + 1, col), i);
+            ufTop.union(calculateIndex(row + 1, col), i);
         }
 
         // left
         if (col >= 2 && isOpen(row, col - 1)) {
             uf.union(calculateIndex(row, col - 1), i);
+            ufTop.union(calculateIndex(row, col - 1), i);
         }
 
         // right
         if (col < n && isOpen(row, col + 1)) {
             uf.union(calculateIndex(row, col + 1), i);
+            ufTop.union(calculateIndex(row, col + 1), i);
         }
     }
 
@@ -81,7 +87,7 @@ public class Percolation {
     /* is site (row, col) full? */
     public boolean isFull(int row, int col) {
         int i = calculateIndex(row, col);
-        return uf.connected(i, top) && isOpen(row, col);
+        return ufTop.connected(i, top) && isOpen(row, col);
     }
 
     /* number of open sites */
