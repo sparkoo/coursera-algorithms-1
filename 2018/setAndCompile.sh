@@ -3,7 +3,21 @@
 JAVA=java
 JAVAC=javac
 
-SEP=";"
+SEP=":"
+
+OS=`uname -s`
+case "$OS" in
+  Linux )
+    SEP=":"
+    ;;
+  Windows* | CYGWIN* )
+    SEP=";"
+    ;;
+  * )
+    echo "Unrecognized system!"
+    exit 1;
+    ;;
+esac
 
 OUT_DIR=out/
 LIBS_DIR=../libs
