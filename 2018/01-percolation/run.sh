@@ -2,24 +2,9 @@
 
 set -x
 
-JAVA=java
-JAVAC=javac
+LESSON_DATA_DIR=percolation
+source ../setAndCompile.sh
 
-SEP=";"
-
-OUT_DIR=out/
-LIBS_DIR=../libs
-DATA_DIR=lesson_data/percolation
-ALGS4JAR=${LIBS_DIR}/algs4.jar
-
-rm -rf ${OUT_DIR}
-mkdir -p ${OUT_DIR}
-
-javac -cp ${ALGS4JAR} -d out src/*.java ${DATA_DIR}/*.java
-
-ls -l out
-
-
-#java -cp "${ALGS4JAR}${SEP}${OUT_DIR}" InteractivePercolationVisualizer 1
-#java -cp "${ALGS4JAR}${SEP}${OUT_DIR}" PercolationVisualizer ${DATA_DIR}/input1.txt
-java -cp "${ALGS4JAR}${SEP}${OUT_DIR}" PercolationStats 200 100
+#${JAVA} -cp "${ALGS4JAR}${SEP}${OUT_DIR}" InteractivePercolationVisualizer 10
+${JAVA} -cp "${ALGS4JAR}${SEP}${OUT_DIR}" PercolationVisualizer ${DATA_DIR}/input10.txt
+#${JAVA} -cp "${ALGS4JAR}${SEP}${OUT_DIR}" PercolationStats 200 100
