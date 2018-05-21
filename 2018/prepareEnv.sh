@@ -17,6 +17,8 @@ function prepareLesson() {
     LESSON_DIR=${1}
     LESSON_TEST_ARCHIVE=${2}.zip
 
+    mkdir -p ${LESSON_DIR}
+    mkdir -p ${LESSON_DIR}/src
     if [ ! -f ${LESSON_DIR}/run.sh ]; then
         cp run_template.sh ${LESSON_DIR}/run.sh
     fi
@@ -32,3 +34,4 @@ function prepareLesson() {
 # prepare lesson data
 prepareLesson 01-percolation percolation-testing
 prepareLesson 02-queues queues
+prepareLesson 03-collinear collinear-testing
