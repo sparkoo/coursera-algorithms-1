@@ -8,4 +8,5 @@ LESSON_DATA_DIR=collinear
 source ../setAndCompile.sh
 
 # run whatever here. example:
-${JAVA} -cp "${ALGS4JAR}${SEP}${OUT_DIR}" Point ${DATA_DIR}/rs1423.txt
+${JAVA} -ea -cp "${ALGS4JAR}${SEP}${OUT_DIR}" Point
+${JAVA} -ea -cp "${ALGS4JAR}${SEP}${OUT_DIR}" BruteCollinearPoints ${DATA_DIR}/input100.txt

@@ -10,6 +10,7 @@
 
 import java.util.Comparator;
 import edu.princeton.cs.algs4.StdDraw;
+import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.In;
 
 public class Point implements Comparable<Point> {
@@ -60,7 +61,16 @@ public class Point implements Comparable<Point> {
      * @return the slope between this point and the specified point
      */
     public double slopeTo(Point that) {
-        return (that.y - y) / (that.x - x);
+        if (that.x == x) {
+            return Double.POSITIVE_INFINITY;
+        }
+        if (that.y == y) {
+            return +0.0;
+        }
+        if (that.y == y && that.x == x) {
+            return Double.NEGATIVE_INFINITY;
+        }
+        return (double)(that.y - y) / (double)(that.x - x);
     }
 
     /**
@@ -123,23 +133,27 @@ public class Point implements Comparable<Point> {
      * Unit tests the Point data type.
      */
     public static void main(String[] args) {
-        // read the n points from a file
-        In in = new In(args[0]);
-        int n = in.readInt();
-        Point[] points = new Point[n];
-        for (int i = 0; i < n; i++) {
-            int x = in.readInt();
-            int y = in.readInt();
-            points[i] = new Point(x, y);
-        }
+        Point p1 = new Point(0, 0);
+        Point p2 = new Point(5, 0);
+        assert p1.slopeTo(p2) == 0.0;
 
-        // draw the points
-        StdDraw.enableDoubleBuffering();
-        StdDraw.setXscale(0, 32768);
-        StdDraw.setYscale(0, 32768);
-        for (Point p : points) {
-            p.draw();
-        }
-        StdDraw.show();
+        p2 = new Point(-5, 0);
+        assert p1.slopeTo(p2) == 0.0;
+
+        p2 = new Point(0, 5);
+        assert p1.slopeTo(p2) == Double.POSITIVE_INFINITY;
+
+        p2 = new Point(0, -5);
+        assert p1.slopeTo(p2) == Double.POSITIVE_INFINITY;
+
+        p2 = new Point(1, 1);
+        assert p1.slopeTo(p2) == 1.0;
+
+        p2 = new Point(-1, -1);
+        assert p1.slopeTo(p2) == 1.0;
+
+        p1 = new Point(19000, 10000);
+        p2 = new Point(1234, 5678);
+        System.out.println(p1.slopeTo(p2));
     }
 }
