@@ -15,7 +15,7 @@ public class FastCollinearPoints {
     }
 
     private LineSegment[] analyze(Point[] points) {
-        LineSegment[] tmpSegments = new LineSegment[points.length];
+        LineSegment[] tmpSegments = new LineSegment[points.length * 4];
 
         for (int i = 0; i < points.length; i++) {
             Point p = points[i];
@@ -41,11 +41,11 @@ public class FastCollinearPoints {
             }
         }
 
-        LineSegment[] segments = new LineSegment[segmentsCount];
+        LineSegment[] realSegments = new LineSegment[segmentsCount];
         for (int i = 0; i < segmentsCount; i++) {
-            segments[i] = tmpSegments[i];
+            realSegments[i] = tmpSegments[i];
         }
-        return segments;
+        return realSegments;
     }
 
     /** the number of line segments */
@@ -55,7 +55,9 @@ public class FastCollinearPoints {
 
     /** the line segments */
     public LineSegment[] segments() {
-        return segments;
+        LineSegment[] returnSegments = new LineSegment[segments.length];
+        System.arraycopy(segments, 0, returnSegments, 0, segments.length);
+        return returnSegments;
     }
 
     public static void main(String[] args) {

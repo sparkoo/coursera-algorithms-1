@@ -10,4 +10,4 @@ source ../setAndCompile.sh
 # run whatever here. example:
 ${JAVA} -ea -cp "${ALGS4JAR}${SEP}${OUT_DIR}" Point
 #${JAVA} -ea -cp "${ALGS4JAR}${SEP}${OUT_DIR}" BruteCollinearPoints ${DATA_DIR}/input100.txt
-${JAVA} -ea -cp "${ALGS4JAR}${SEP}${OUT_DIR}" FastCollinearPoints ${DATA_DIR}/input10.txt
+${JAVA} -ea -cp "${ALGS4JAR}${SEP}${OUT_DIR}" FastCollinearPoints ${DATA_DIR}/input200.txt
