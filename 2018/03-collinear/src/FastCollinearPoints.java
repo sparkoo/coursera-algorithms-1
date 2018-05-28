@@ -5,19 +5,41 @@ import java.util.Arrays;
 
 public class FastCollinearPoints {
 
-    private Point[] points;
     private int segmentsCount;
     private LineSegment[] segments;
 
     /** finds all line segments containing 4 or more points */
     public FastCollinearPoints(Point[] points) {
-        this.points = points;
         this.segmentsCount = 0;
-        this.segments = this.analyze();
+        this.segments = this.analyze(points);
     }
 
-    private LineSegment[] analyze() {
-        LineSegment[] tmpSegments = new LineSegment[points.length * 4];
+    private LineSegment[] analyze(Point[] points) {
+        LineSegment[] tmpSegments = new LineSegment[points.length];
+
+        for (int i = 0; i < points.length; i++) {
+            Point p = points[i];
+
+            int copySize = points.length - i - 1;
+            Point[] copyPoints = new Point[copySize];
+            System.arraycopy(points, i + 1, copyPoints, 0, copySize);
+            Arrays.sort(copyPoints, p.slopeOrder());
+
+            int lineCounter = 2;
+            for (int j = 1; j < copySize; j++) {
+                if (p.slopeTo(copyPoints[j - 1]) == p.slopeTo(copyPoints[j])) {
+                    lineCounter++;
+                } else {
+                    if (lineCounter >= 4) {
+                        tmpSegments[segmentsCount++] = new LineSegment(p, copyPoints[j - 1]);
+                    }
+                    lineCounter = 2;
+                }
+            }
+            if (lineCounter >= 4) {
+                tmpSegments[segmentsCount++] = new LineSegment(p, copyPoints[copyPoints.length - 1]);
+            }
+        }
 
         LineSegment[] segments = new LineSegment[segmentsCount];
         for (int i = 0; i < segmentsCount; i++) {
