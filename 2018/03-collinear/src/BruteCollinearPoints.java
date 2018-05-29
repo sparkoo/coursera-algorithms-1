@@ -14,7 +14,9 @@ public class BruteCollinearPoints {
             throw new IllegalArgumentException("points can't be null");
         }
 
-        segments = analyzeSegments(points);
+        Point[] p = new Point[points.length];
+        System.arraycopy(points, 0, p, 0, points.length);
+        segments = analyzeSegments(p);
     }
 
     private LineSegment[] analyzeSegments(Point[] points) {
