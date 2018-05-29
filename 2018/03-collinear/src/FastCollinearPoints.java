@@ -1,6 +1,7 @@
 import edu.princeton.cs.algs4.StdDraw;
 import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.In;
+import edu.princeton.cs.algs4.MergeX;
 import java.util.Arrays;
 
 public class FastCollinearPoints {
@@ -16,6 +17,7 @@ public class FastCollinearPoints {
 
     private LineSegment[] analyze(Point[] points) {
         LineSegment[] tmpSegments = new LineSegment[points.length * 4];
+        MergeX.sort(points);
 
         for (int i = 0; i < points.length; i++) {
             Point p = points[i];
@@ -23,7 +25,7 @@ public class FastCollinearPoints {
             int copySize = points.length - i - 1;
             Point[] copyPoints = new Point[copySize];
             System.arraycopy(points, i + 1, copyPoints, 0, copySize);
-            Arrays.sort(copyPoints, p.slopeOrder());
+            MergeX.sort(copyPoints, p.slopeOrder());
 
             int lineCounter = 2;
             for (int j = 1; j < copySize; j++) {
