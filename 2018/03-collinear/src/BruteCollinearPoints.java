@@ -26,11 +26,11 @@ public class BruteCollinearPoints {
             }
             for (int j = i + 1; j < points.length; j++) {
                 for (int k = j + 1; k < points.length; k++) {
-                    for (int l = k + 1; l < points.length; l++) {
+                    for (int m = k + 1; m < points.length; m++) {
                         Point p = points[i];
                         Point q = points[j];
                         Point r = points[k];
-                        Point s = points[l];
+                        Point s = points[m];
                         if (Double.compare(p.slopeTo(q), p.slopeTo(r)) == 0 && Double.compare(p.slopeTo(q), p.slopeTo(s)) == 0) {
                             tmpSegments[segmentsSize++] = new LineSegment(p, s);
                         }
@@ -38,11 +38,11 @@ public class BruteCollinearPoints {
                 }
             }
         }
-        LineSegment[] segments = new LineSegment[segmentsSize];
+        LineSegment[] resultSegments = new LineSegment[segmentsSize];
         for (int i = 0; i < segmentsSize; i++) {
-            segments[i] = tmpSegments[i];
+            resultSegments[i] = tmpSegments[i];
         }
-        return segments;
+        return resultSegments;
     }
 
     /** the number of line segments */

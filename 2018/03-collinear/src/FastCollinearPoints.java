@@ -2,12 +2,11 @@ import edu.princeton.cs.algs4.StdDraw;
 import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.MergeX;
-import java.util.Arrays;
 
 public class FastCollinearPoints {
 
     private int segmentsCount;
-    private LineSegment[] segments;
+    private final LineSegment[] segments;
 
     /** finds all line segments containing 4 or more points */
     public FastCollinearPoints(Point[] points) {
