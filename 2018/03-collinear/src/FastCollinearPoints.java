@@ -10,6 +10,15 @@ public class FastCollinearPoints {
 
     /** finds all line segments containing 4 or more points */
     public FastCollinearPoints(Point[] points) {
+        if (points == null) {
+            throw new IllegalArgumentException("points can't be null");
+        }
+        for (Point p : points) {
+            if (p == null) {
+                throw new IllegalArgumentException("point can't be null");
+            }
+        }
+
         this.segmentsCount = 0;
         this.segments = this.analyze(points);
     }
