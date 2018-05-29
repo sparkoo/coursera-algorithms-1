@@ -20,7 +20,10 @@ public class FastCollinearPoints {
         }
 
         this.segmentsCount = 0;
-        this.segments = this.analyze(points);
+
+        Point[] p = new Point[points.length];
+        System.arraycopy(points, 0, p, 0, points.length);
+        this.segments = this.analyze(p);
     }
 
     private LineSegment[] analyze(Point[] points) {
