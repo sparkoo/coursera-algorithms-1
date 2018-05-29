@@ -27,7 +27,7 @@ public class FastCollinearPoints {
 
             int lineCounter = 2;
             for (int j = 1; j < copySize; j++) {
-                if (p.slopeTo(copyPoints[j - 1]) == p.slopeTo(copyPoints[j])) {
+                if (Double.compare(p.slopeTo(copyPoints[j - 1]), p.slopeTo(copyPoints[j])) == 0) {
                     lineCounter++;
                 } else {
                     if (lineCounter >= 4) {

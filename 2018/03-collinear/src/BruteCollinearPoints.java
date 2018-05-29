@@ -31,7 +31,7 @@ public class BruteCollinearPoints {
                         Point q = points[j];
                         Point r = points[k];
                         Point s = points[l];
-                        if (p.slopeTo(q) == p.slopeTo(r) && p.slopeTo(q) == p.slopeTo(s)) {
+                        if (Double.compare(p.slopeTo(q), p.slopeTo(r)) == 0 && Double.compare(p.slopeTo(q), p.slopeTo(s)) == 0) {
                             tmpSegments[segmentsSize++] = new LineSegment(p, s);
                         }
                     }
