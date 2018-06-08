@@ -41,7 +41,7 @@ public class Solver {
         while (!currentNode.board.isGoal() && !bTwin.isGoal()) {
             currentNode = pq.delMin();
             for (Board bn : currentNode.board.neighbors()) {
-                if (!bn.equals(currentNode)) {
+                if (!bn.equals(currentNode.board)) {
                     pq.insert(new Node(bn, currentNode));
                 }
             }
