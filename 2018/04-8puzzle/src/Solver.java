@@ -77,10 +77,6 @@ public class Solver {
             this.previous = previous;
             this.manhattan = board.manhattan();
         }
-
-        public Board getBoard() {
-            return board;
-        }
     }
 
     private static class ManhattanNodeComparator implements Comparator<Solver.Node> {
