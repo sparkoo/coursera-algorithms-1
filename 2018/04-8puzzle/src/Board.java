@@ -88,7 +88,21 @@ public class Board {
 
     /** a board that is obtained by exchanging any pair of blocks */
     public Board twin() {
-        return null;
+        int swapFromI;
+        int swapToI;
+        if (zeroI == 0) {
+            swapToI = zeroI + 1;
+        } else {
+            swapToI = zeroI - 1;
+        }
+
+        int swapToJ;
+        if (zeroJ == 0) {
+            swapToJ = zeroJ + 1;
+        } else {
+            swapToJ = zeroJ - 1;
+        }
+        return neighborSwap(swapToI, zeroJ, swapToI, swapToJ);
     }
 
     /** does this board equal y? */
@@ -136,8 +150,9 @@ public class Board {
 
         int[][] blocks = blocksCopy(this.blocks);
 
+        int tmp = blocks[fromI][fromJ];
         blocks[fromI][fromJ] = blocks[toI][toJ];
-        blocks[toI][toJ] = 0;
+        blocks[toI][toJ] = tmp;
         return new Board(blocks, moves + 1, dimension);
     }
 
@@ -182,6 +197,7 @@ public class Board {
         System.out.println("goal: " + initial.isGoal());
         System.out.println(initial.equals(initial2));
 
-        initial.neighbors().forEach(System.out::println);
+        //initial.neighbors().forEach(System.out::println);
+        System.out.println(initial.twin());
     }
 }
