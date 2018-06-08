@@ -7,30 +7,19 @@ import java.util.Comparator;
 import java.util.Collections;
 
 public class Solver {
-    private final Comparator<Node> manhattanNodeComparator = new Comparator<Node>() {
-        @Override
-        public int compare(Node n1, Node n2) {
-            return n1.board.manhattan() - n2.board.manhattan();
-        }
-    };
-
-    private final Comparator<Board> manhattanComparator = new Comparator<Board>() {
-        @Override
-        public int compare(Board b1, Board b2) {
-            return b1.manhattan() - b2.manhattan();
-        }
-    };
-
     private final List<Board> solution = new ArrayList<>();
 
     /** find a solution to the initial board (using the A* algorithm) */
     public Solver(Board initial) {
+        if (initial == null) {
+            throw new IllegalArgumentException("initial board can't be null");
+        }
         solve(initial);
     }
 
     private void solve(Board b) {
-        MinPQ<Node> pq = new MinPQ<>(manhattanNodeComparator);
-        MinPQ<Board> pqTwin = new MinPQ<>(manhattanComparator);
+        MinPQ<Node> pq = new MinPQ<>(new ManhattanNodeComparator());
+        MinPQ<Board> pqTwin = new MinPQ<>(new ManhattanComparator());
 
         Node currentNode = new Node(b, null);
         pq.insert(currentNode);
@@ -65,7 +54,7 @@ public class Solver {
 
     /** is the initial board solvable? */
     public boolean isSolvable() {
-        return solution.size() > 0;
+        return !solution.isEmpty();
     }
 
     /** min number of moves to solve initial board; -1 if unsolvable */
@@ -85,6 +74,20 @@ public class Solver {
         private Node(Board board, Node previous) {
             this.board = board;
             this.previous = previous;
+        }
+    }
+
+    private static class ManhattanNodeComparator implements Comparator<Node> {
+        @Override
+        public int compare(Node n1, Node n2) {
+            return n1.board.manhattan() - n2.board.manhattan();
+        }
+    }
+
+    private static class ManhattanComparator implements Comparator<Board> {
+        @Override
+        public int compare(Board b1, Board b2) {
+            return b1.manhattan() - b2.manhattan();
         }
     }
 

@@ -3,7 +3,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class Board {
-    private final int[][] blocks;
+    private final int[][] blocksCache;
     private int zeroI;
     private int zeroJ;
 
@@ -22,16 +22,19 @@ public class Board {
     }
 
     private Board(int[][] blocks, int moves, int dimension) {
+        if (blocks == null) {
+            throw new IllegalArgumentException("blocks can't be null");
+        }
         this.moves = moves;
         this.dimension = dimension;
-        this.blocks = blocksCopy(blocks);
+        this.blocksCache = blocksCopy(blocks);
         calculateDistances(blocks);
     }
 
-    private int[][] blocksCopy(int[][] blocks) {
+    private int[][] blocksCopy(int[][] sourceBlocks) {
         int[][] copy = new int[dimension][dimension];
         for (int i = 0; i < dimension; i++) {
-            System.arraycopy(blocks[i], 0, copy[i], 0, dimension);
+            System.arraycopy(sourceBlocks[i], 0, copy[i], 0, dimension);
         }
         return copy;
     }
@@ -88,7 +91,6 @@ public class Board {
 
     /** a board that is obtained by exchanging any pair of blocks */
     public Board twin() {
-        int swapFromI;
         int swapToI;
         if (zeroI == 0) {
             swapToI = zeroI + 1;
@@ -122,9 +124,9 @@ public class Board {
             return false;
         }
 
-        for (int i = 0; i < blocks.length; i++) {
-            for (int j = 0; j < blocks[i].length; j++) {
-                if (blocks[i][j] != that.blocks[i][j]) {
+        for (int i = 0; i < blocksCache.length; i++) {
+            for (int j = 0; j < blocksCache[i].length; j++) {
+                if (blocksCache[i][j] != that.blocksCache[i][j]) {
                     return false;
                 }
             }
@@ -148,7 +150,7 @@ public class Board {
             return null;
         }
 
-        int[][] blocks = blocksCopy(this.blocks);
+        int[][] blocks = blocksCopy(this.blocksCache);
 
         int tmp = blocks[fromI][fromJ];
         blocks[fromI][fromJ] = blocks[toI][toJ];
@@ -165,13 +167,13 @@ public class Board {
     /** string representation of this board (in the output format specified below) */
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < blocks.length; i++) {
-            for (int j = 0; j < blocks[i].length; j++) {
-                sb.append(blocks[i][j]);
+        for (int i = 0; i < blocksCache.length; i++) {
+            for (int j = 0; j < blocksCache[i].length; j++) {
+                sb.append(blocksCache[i][j]);
                 sb.append(" ");
             }
             sb.append("\n");
-        };
+        }
         return sb.toString();
     }
 
