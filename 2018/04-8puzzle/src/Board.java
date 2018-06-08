@@ -1,13 +1,17 @@
 import edu.princeton.cs.algs4.In;
+import java.util.List;
+import java.util.ArrayList;
 
 public class Board {
     private final int[][] blocks;
+    private int zeroI;
+    private int zeroJ;
 
     private final int moves;
 
     private final int dimension;
-    private final int hamming;
-    private final int manhattan;
+    private int hamming;
+    private int manhattan;
 
     /**
     construct a board from an n-by-n array of blocks
@@ -21,8 +25,7 @@ public class Board {
         this.moves = moves;
         this.dimension = dimension;
         this.blocks = blocksCopy(blocks);
-        this.hamming = calculateHamming(blocks);
-        this.manhattan = calculateManhattan(blocks);
+        calculateDistances(blocks);
     }
 
     private int[][] blocksCopy(int[][] blocks) {
@@ -33,22 +36,18 @@ public class Board {
         return copy;
     }
 
-    private int calculateHamming(int[][] blocks) {
+    private void calculateDistances(int[][] blocks) {
+        int manhattan = 0;
         int hamming = 0;
         for (int i = 0; i < blocks.length; i++) {
             for (int j = 0; j < blocks[i].length; j++) {
                 if (blocks[i][j] != 0 && blocks[i][j] != ((dimension * i) + j + 1)) {
                     hamming++;
                 }
-            }
-        }
-        return hamming + moves;
-    }
-
-    private int calculateManhattan(int[][] blocks) {
-        int manhattan = 0;
-        for (int i = 0; i < blocks.length; i++) {
-            for (int j = 0; j < blocks[i].length; j++) {
+                if (blocks[i][j] == 0) {
+                    zeroI = i;
+                    zeroJ = j;
+                }
                 if (blocks[i][j] == 0) {
                     continue;
                 }
@@ -60,11 +59,11 @@ public class Board {
 
                     int distanceJ = j - calcJ;
                     manhattan += distanceJ < 0 ? distanceJ * -1 : distanceJ;
-
                 }
             }
         }
-        return manhattan + moves;
+        this.manhattan = manhattan + moves;
+        this.hamming = hamming + moves;
     }
 
     /** board dimension n */
@@ -121,7 +120,22 @@ public class Board {
 
     /** all neighboring boards */
     public Iterable<Board> neighbors() {
-        return null;
+        List<Board> neighbors = new ArrayList<>();
+        neighborSwap(blocksCopy(blocks), zeroI, zeroJ, zeroI - 1, zeroJ, neighbors);
+        neighborSwap(blocksCopy(blocks), zeroI, zeroJ, zeroI + 1, zeroJ, neighbors);
+        neighborSwap(blocksCopy(blocks), zeroI, zeroJ, zeroI, zeroJ - 1, neighbors);
+        neighborSwap(blocksCopy(blocks), zeroI, zeroJ, zeroI, zeroJ + 1, neighbors);
+        return neighbors;
+    }
+
+    private void neighborSwap(int[][] blocks, int zeroI, int zeroJ, int swapI, int swapJ, List<Board> neighbors) {
+        if (swapI < 0 || swapI >= dimension || swapJ < 0 || swapJ >= dimension) {
+            return;
+        }
+
+        blocks[zeroI][zeroJ] = blocks[swapI][swapJ];
+        blocks[swapI][swapJ] = 0;
+        neighbors.add(new Board(blocks, moves + 1, dimension));
     }
 
     /** string representation of this board (in the output format specified below) */
@@ -158,5 +172,7 @@ public class Board {
         System.out.println("manhattan: " + initial.manhattan);
         System.out.println("goal: " + initial.isGoal());
         System.out.println(initial.equals(initial2));
+
+        initial.neighbors().forEach(System.out::println);
     }
 }
