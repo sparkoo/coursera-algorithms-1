@@ -83,7 +83,7 @@ public class Board {
 
     /** is this board the goal board? */
     public boolean isGoal() {
-        return hamming == 0;
+        return hamming - moves == 0;
     }
 
     /** a board that is obtained by exchanging any pair of blocks */
