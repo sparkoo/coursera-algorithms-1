@@ -22,23 +22,23 @@ public class Solver {
         MinPQ<Node> pqTwin = new MinPQ<>(new ManhattanNodeComparator());
 
         Node currentNode = new Node(b, null);
-        pq.insert(currentNode);
-
         Node currentTwinNode = new Node(b.twin(), null);
+
+        pq.insert(currentNode);
         pqTwin.insert(currentTwinNode);
 
         while (!currentNode.board.isGoal() && !currentTwinNode.board.isGoal()) {
             currentNode = pq.delMin();
-            for (Board bn : currentNode.board.neighbors()) {
-                if (!bn.equals(currentNode.board)) {
-                    pq.insert(new Node(bn, currentNode));
+            for (Board neighBoard : currentNode.board.neighbors()) {
+                if (currentNode.previous == null || !currentNode.previous.equals(neighBoard)) {
+                    pq.insert(new Node(neighBoard, currentNode));
                 }
             }
 
             currentTwinNode = pqTwin.delMin();
-            for (Board bn : currentTwinNode.board.neighbors()) {
-                if (!bn.equals(currentTwinNode.board)) {
-                    pqTwin.insert(new Node(bn, currentTwinNode));
+            for (Board neighBoard : currentTwinNode.board.neighbors()) {
+                if (currentTwinNode.previous == null || !currentNode.previous.equals(neighBoard)) {
+                    pqTwin.insert(new Node(neighBoard, currentTwinNode));
                 }
             }
         }
@@ -79,9 +79,9 @@ public class Solver {
         }
     }
 
-    private static class ManhattanNodeComparator implements Comparator<Solver.Node> {
+    private static class ManhattanNodeComparator implements Comparator<Node> {
         @Override
-        public int compare(Solver.Node n1, Solver.Node n2) {
+        public int compare(Node n1, Node n2) {
             return n1.manhattan - n2.manhattan;
         }
     }
