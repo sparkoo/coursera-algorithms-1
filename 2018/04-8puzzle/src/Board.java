@@ -7,8 +7,6 @@ public class Board {
     private int zeroI;
     private int zeroJ;
 
-    private final int moves;
-
     private final int dimension;
     private int hamming;
     private int manhattan;
@@ -18,14 +16,13 @@ public class Board {
     (where blocks[i][j] = block in row i, column j)
     */
     public Board(int[][] blocks) {
-        this(blocks, 0, blocks.length);
+        this(blocks, blocks.length);
     }
 
-    private Board(int[][] blocks, int moves, int dimension) {
+    private Board(int[][] blocks, int dimension) {
         if (blocks == null) {
             throw new IllegalArgumentException("blocks can't be null");
         }
-        this.moves = moves;
         this.dimension = dimension;
         this.blocksCache = blocksCopy(blocks);
         calculateDistances(blocks);
@@ -65,8 +62,8 @@ public class Board {
                 }
             }
         }
-        this.manhattan = manhattanCalc + moves;
-        this.hamming = hammingCalc + moves;
+        this.manhattan = manhattanCalc;
+        this.hamming = hammingCalc;
     }
 
     /** board dimension n */
@@ -86,7 +83,7 @@ public class Board {
 
     /** is this board the goal board? */
     public boolean isGoal() {
-        return hamming - moves == 0;
+        return hamming == 0;
     }
 
     /** a board that is obtained by exchanging any pair of blocks */
@@ -121,7 +118,6 @@ public class Board {
         Board that = (Board) y;
 
         if (that.dimension != dimension ||
-            that.moves != moves ||
             that.manhattan != manhattan ||
             that.hamming != hamming) {
             return false;
@@ -158,7 +154,7 @@ public class Board {
         int tmp = blocks[fromI][fromJ];
         blocks[fromI][fromJ] = blocks[toI][toJ];
         blocks[toI][toJ] = tmp;
-        return new Board(blocks, moves + 1, dimension);
+        return new Board(blocks, dimension);
     }
 
     private void addNeighbor(Board b, List<Board> neighbors) {
@@ -195,13 +191,19 @@ public class Board {
         blocks[n - 1][n - 1] = 3;
         Board initial2 = new Board(blocks);
 
-        System.out.println(initial);
-        System.out.println("dimmension: " + initial.dimension);
-        System.out.println("hamming: " + initial.hamming);
-        System.out.println("manhattan: " + initial.manhattan);
-        System.out.println("goal: " + initial.isGoal());
+        printBoard(initial);
         System.out.println(initial.equals(initial2));
 
-        System.out.println(initial.twin());
+        initial.neighbors().forEach(b -> printBoard(b));
+    }
+
+    private static void printBoard(Board b) {
+        System.out.println("=================");
+        System.out.println(b);
+        System.out.println("dimmension: " + b.dimension);
+        System.out.println("hamming: " + b.hamming);
+        System.out.println("manhattan: " + b.manhattan);
+        System.out.println("goal: " + b.isGoal());
+        System.out.println("=================");
     }
 }
