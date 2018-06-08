@@ -19,15 +19,15 @@ public class Solver {
 
     private void solve(Board b) {
         MinPQ<Node> pq = new MinPQ<>(new ManhattanNodeComparator());
-        MinPQ<Board> pqTwin = new MinPQ<>(new ManhattanComparator());
+        MinPQ<Node> pqTwin = new MinPQ<>(new ManhattanNodeComparator());
 
         Node currentNode = new Node(b, null);
         pq.insert(currentNode);
 
-        Board bTwin = b.twin();
-        pqTwin.insert(bTwin);
+        Node currentTwinNode = new Node(b.twin(), null);
+        pqTwin.insert(currentTwinNode);
 
-        while (!currentNode.board.isGoal() && !bTwin.isGoal()) {
+        while (!currentNode.board.isGoal() && !currentTwinNode.board.isGoal()) {
             currentNode = pq.delMin();
             for (Board bn : currentNode.board.neighbors()) {
                 if (!bn.equals(currentNode.board)) {
@@ -35,15 +35,15 @@ public class Solver {
                 }
             }
 
-            bTwin = pqTwin.delMin();
-            for (Board bn : bTwin.neighbors()) {
-                if (!bn.equals(bTwin)) {
-                    pqTwin.insert(bn);
+            currentTwinNode = pqTwin.delMin();
+            for (Board bn : currentTwinNode.board.neighbors()) {
+                if (!bn.equals(currentTwinNode.board)) {
+                    pqTwin.insert(new Node(bn, currentTwinNode));
                 }
             }
         }
 
-        if (currentNode.board.isGoal() && !bTwin.isGoal()) {
+        if (currentNode.board.isGoal() && !currentTwinNode.board.isGoal()) {
             while (currentNode != null) {
                 solution.add(currentNode.board);
                 currentNode = currentNode.previous;
@@ -70,24 +70,23 @@ public class Solver {
     private static class Node {
         private final Board board;
         private final Node previous;
+        private final int manhattan;
 
         private Node(Board board, Node previous) {
             this.board = board;
             this.previous = previous;
+            this.manhattan = board.manhattan();
+        }
+
+        public Board getBoard() {
+            return board;
         }
     }
 
-    private static class ManhattanNodeComparator implements Comparator<Node> {
+    private static class ManhattanNodeComparator implements Comparator<Solver.Node> {
         @Override
-        public int compare(Node n1, Node n2) {
-            return n1.board.manhattan() - n2.board.manhattan();
-        }
-    }
-
-    private static class ManhattanComparator implements Comparator<Board> {
-        @Override
-        public int compare(Board b1, Board b2) {
-            return b1.manhattan() - b2.manhattan();
+        public int compare(Solver.Node n1, Solver.Node n2) {
+            return n1.manhattan - n2.manhattan;
         }
     }
 
