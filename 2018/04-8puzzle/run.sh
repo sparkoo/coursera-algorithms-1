@@ -15,7 +15,9 @@ timeout 5 ${JAVA} -cp "${ALGS4JAR}${SEP}${OUT_DIR}" Solver ${DATA_DIR}/puzzle3x3
 timeout 5 ${JAVA} -cp "${ALGS4JAR}${SEP}${OUT_DIR}" Solver ${DATA_DIR}/puzzle3x3-unsolvable1.txt
 timeout 5 ${JAVA} -cp "${ALGS4JAR}${SEP}${OUT_DIR}" Solver ${DATA_DIR}/puzzle3x3-unsolvable2.txt
 timeout 5 ${JAVA} -cp "${ALGS4JAR}${SEP}${OUT_DIR}" Solver ${DATA_DIR}/puzzle4x4-unsolvable.txt
-#${JAVA} -cp "${ALGS4JAR}${SEP}${OUT_DIR}" Solver ${DATA_DIR}/puzzle04.txt
+${JAVA} -cp "${ALGS4JAR}${SEP}${OUT_DIR}" Solver ${DATA_DIR}/puzzle04.txt
+${JAVA} -cp "${ALGS4JAR}${SEP}${OUT_DIR}" Solver ${DATA_DIR}/puzzle20.txt
+${JAVA} -cp "${ALGS4JAR}${SEP}${OUT_DIR}" Solver ${DATA_DIR}/puzzle25.txt
 #${JAVA} -cp "${ALGS4JAR}${SEP}${OUT_DIR}" Solver ${DATA_DIR}/puzzle00.txt
 
 zip 8puzzle src/*.java

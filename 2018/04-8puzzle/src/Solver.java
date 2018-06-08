@@ -30,14 +30,14 @@ public class Solver {
         while (!currentNode.board.isGoal() && !currentTwinNode.board.isGoal()) {
             currentNode = pq.delMin();
             for (Board neighBoard : currentNode.board.neighbors()) {
-                if (currentNode.previous == null || !currentNode.previous.equals(neighBoard)) {
+                if (currentNode.previous == null || !currentNode.previous.board.equals(neighBoard)) {
                     pq.insert(new Node(neighBoard, currentNode, currentNode.moves + 1));
                 }
             }
 
             currentTwinNode = pqTwin.delMin();
             for (Board neighBoard : currentTwinNode.board.neighbors()) {
-                if (currentTwinNode.previous == null || !currentNode.previous.equals(neighBoard)) {
+                if (currentTwinNode.previous == null || !currentNode.previous.board.equals(neighBoard)) {
                     pqTwin.insert(new Node(neighBoard, currentTwinNode, currentTwinNode.moves + 1));
                 }
             }
@@ -64,7 +64,11 @@ public class Solver {
 
     /** sequence of boards in a shortest solution; null if unsolvable */
     public Iterable<Board> solution() {
-        return solution;
+        if (isSolvable()) {
+            return solution;
+        } else {
+            return null;
+        }
     }
 
     private static class Node {
