@@ -21,8 +21,8 @@ public class Solver {
         MinPQ<Node> pq = new MinPQ<>(new ManhattanNodeComparator());
         MinPQ<Node> pqTwin = new MinPQ<>(new ManhattanNodeComparator());
 
-        Node currentNode = new Node(b, null);
-        Node currentTwinNode = new Node(b.twin(), null);
+        Node currentNode = new Node(b, null, 0);
+        Node currentTwinNode = new Node(b.twin(), null, 0);
 
         pq.insert(currentNode);
         pqTwin.insert(currentTwinNode);
@@ -31,14 +31,14 @@ public class Solver {
             currentNode = pq.delMin();
             for (Board neighBoard : currentNode.board.neighbors()) {
                 if (currentNode.previous == null || !currentNode.previous.equals(neighBoard)) {
-                    pq.insert(new Node(neighBoard, currentNode));
+                    pq.insert(new Node(neighBoard, currentNode, currentNode.moves + 1));
                 }
             }
 
             currentTwinNode = pqTwin.delMin();
             for (Board neighBoard : currentTwinNode.board.neighbors()) {
                 if (currentTwinNode.previous == null || !currentNode.previous.equals(neighBoard)) {
-                    pqTwin.insert(new Node(neighBoard, currentTwinNode));
+                    pqTwin.insert(new Node(neighBoard, currentTwinNode, currentTwinNode.moves + 1));
                 }
             }
         }
@@ -71,11 +71,13 @@ public class Solver {
         private final Board board;
         private final Node previous;
         private final int manhattan;
+        private final int moves;
 
-        private Node(Board board, Node previous) {
+        private Node(Board board, Node previous, int moves) {
             this.board = board;
             this.previous = previous;
-            this.manhattan = board.manhattan();
+            this.moves = moves;
+            this.manhattan = board.manhattan() + moves;
         }
     }
 
