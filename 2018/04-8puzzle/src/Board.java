@@ -40,12 +40,12 @@ public class Board {
     }
 
     private void calculateDistances(int[][] blocks) {
-        int manhattan = 0;
-        int hamming = 0;
+        int manhattanCalc = 0;
+        int hammingCalc = 0;
         for (int i = 0; i < blocks.length; i++) {
             for (int j = 0; j < blocks[i].length; j++) {
                 if (blocks[i][j] != 0 && blocks[i][j] != ((dimension * i) + j + 1)) {
-                    hamming++;
+                    hammingCalc++;
                 }
                 if (blocks[i][j] == 0) {
                     zeroI = i;
@@ -58,15 +58,15 @@ public class Board {
                 int calcJ = (blocks[i][j] - 1) % dimension;
                 if (i != calcI || j != calcJ) {
                     int distanceI = i - calcI;
-                    manhattan += distanceI < 0 ? distanceI * -1 : distanceI;
+                    manhattanCalc += distanceI < 0 ? distanceI * -1 : distanceI;
 
                     int distanceJ = j - calcJ;
-                    manhattan += distanceJ < 0 ? distanceJ * -1 : distanceJ;
+                    manhattanCalc += distanceJ < 0 ? distanceJ * -1 : distanceJ;
                 }
             }
         }
-        this.manhattan = manhattan + moves;
-        this.hamming = hamming + moves;
+        this.manhattan = manhattanCalc + moves;
+        this.hamming = hammingCalc + moves;
     }
 
     /** board dimension n */
@@ -109,10 +109,13 @@ public class Board {
 
     /** does this board equal y? */
     public boolean equals(Object y) {
+        if (y == null) {
+            return false;
+        }
         if (y == this) {
             return true;
         }
-        if (!(y instanceof Board)) {
+        if (y.getClass() != this.getClass()) {
             return false;
         }
         Board that = (Board) y;
@@ -167,10 +170,10 @@ public class Board {
     /** string representation of this board (in the output format specified below) */
     public String toString() {
         StringBuilder sb = new StringBuilder();
+        sb.append(dimension + "\n");
         for (int i = 0; i < blocksCache.length; i++) {
             for (int j = 0; j < blocksCache[i].length; j++) {
-                sb.append(blocksCache[i][j]);
-                sb.append(" ");
+                sb.append(String.format(" %2d", blocksCache[i][j]));
             }
             sb.append("\n");
         }
@@ -199,7 +202,6 @@ public class Board {
         System.out.println("goal: " + initial.isGoal());
         System.out.println(initial.equals(initial2));
 
-        //initial.neighbors().forEach(System.out::println);
         System.out.println(initial.twin());
     }
 }
