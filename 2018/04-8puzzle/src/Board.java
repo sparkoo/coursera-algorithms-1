@@ -121,21 +121,30 @@ public class Board {
     /** all neighboring boards */
     public Iterable<Board> neighbors() {
         List<Board> neighbors = new ArrayList<>();
-        neighborSwap(blocksCopy(blocks), zeroI, zeroJ, zeroI - 1, zeroJ, neighbors);
-        neighborSwap(blocksCopy(blocks), zeroI, zeroJ, zeroI + 1, zeroJ, neighbors);
-        neighborSwap(blocksCopy(blocks), zeroI, zeroJ, zeroI, zeroJ - 1, neighbors);
-        neighborSwap(blocksCopy(blocks), zeroI, zeroJ, zeroI, zeroJ + 1, neighbors);
+        addNeighbor(neighborSwap(zeroI, zeroJ, zeroI - 1, zeroJ), neighbors);
+        addNeighbor(neighborSwap(zeroI, zeroJ, zeroI + 1, zeroJ), neighbors);
+        addNeighbor(neighborSwap(zeroI, zeroJ, zeroI, zeroJ - 1), neighbors);
+        addNeighbor(neighborSwap(zeroI, zeroJ, zeroI, zeroJ + 1), neighbors);
         return neighbors;
     }
 
-    private void neighborSwap(int[][] blocks, int zeroI, int zeroJ, int swapI, int swapJ, List<Board> neighbors) {
-        if (swapI < 0 || swapI >= dimension || swapJ < 0 || swapJ >= dimension) {
-            return;
+    private Board neighborSwap(int fromI, int fromJ, int toI, int toJ) {
+        if (toI < 0 || toI >= dimension || toJ < 0 || toJ >= dimension ||
+            fromI < 0 || fromI >= dimension || fromJ < 0 || fromJ >= dimension) {
+            return null;
         }
 
-        blocks[zeroI][zeroJ] = blocks[swapI][swapJ];
-        blocks[swapI][swapJ] = 0;
-        neighbors.add(new Board(blocks, moves + 1, dimension));
+        int[][] blocks = blocksCopy(this.blocks);
+
+        blocks[fromI][fromJ] = blocks[toI][toJ];
+        blocks[toI][toJ] = 0;
+        return new Board(blocks, moves + 1, dimension);
+    }
+
+    private void addNeighbor(Board b, List<Board> neighbors) {
+        if (b != null) {
+            neighbors.add(b);
+        }
     }
 
     /** string representation of this board (in the output format specified below) */
