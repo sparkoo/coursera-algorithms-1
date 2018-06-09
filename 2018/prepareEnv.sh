@@ -36,3 +36,4 @@ prepareLesson 01-percolation percolation-testing
 prepareLesson 02-queues queues
 prepareLesson 03-collinear collinear-testing
 prepareLesson 04-8puzzle 8puzzle-testing
+prepareLesson 05-kdtree kdtree-testing
