@@ -1,5 +1,6 @@
 import edu.princeton.cs.algs4.Point2D;
 import edu.princeton.cs.algs4.RectHV;
+import java.util.ArrayList;
 
 public class KdTree {
 
@@ -35,12 +36,12 @@ public class KdTree {
 
     /** all points that are inside the rectangle (or on the boundary) */
     public Iterable<Point2D> range(RectHV rect) {
-        return null;
+        return new ArrayList<Point2D>();
     }
 
     /** a nearest neighbor in the set to point p; null if the set is empty */
     public Point2D nearest(Point2D p) {
-        return null;
+        return new Point2D(0, 0);
     }
 
     /** unit testing of the methods (optional) */
