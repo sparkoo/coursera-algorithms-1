@@ -25,6 +25,30 @@ public class KdTree {
     /** add the point to the set (if it is not already in the set) */
     public void insert(Point2D p) {
         size++;
+        root = insert(root, p, true);
+    }
+
+
+    private Node2d insert(Node2d node, Point2D p, boolean horizontalSplit) {
+        if (node == null) {
+            return new Node2d(p, null, null, horizontalSplit);
+        }
+
+        if (horizontalSplit) {
+            if (p.x() < node.point.x()) {
+                node.left = insert(node.left, p, !horizontalSplit);
+            } else {
+                node.right = insert(node.right, p, !horizontalSplit);
+            }
+        } else {
+            if (p.y() < node.point.y()) {
+                node.left = insert(node.left, p, !horizontalSplit);
+            } else {
+                node.right = insert(node.right, p, !horizontalSplit);
+            }
+        }
+
+        return node;
     }
 
     /** does the set contain point p? */
@@ -46,14 +70,25 @@ public class KdTree {
 
     /** a nearest neighbor in the set to point p; null if the set is empty */
     public Point2D nearest(Point2D p) {
-        return new Point2D(0, 0);
+        if (root == null) {
+            return null;
+        }
+
+        return root.point;
     }
 
     private static class Node2d {
         private final Point2D point;
+        private final boolean horizontalSplit;
         private Node2d left;
         private Node2d right;
-        private boolean horizontalSplit;
+
+        private Node2d(Point2D point, Node2d left, Node2d right, boolean horizontalSplit) {
+            this.point = point;
+            this.left = left;
+            this.right = right;
+            this.horizontalSplit = horizontalSplit;
+        }
 
         private void draw() {
             if (left != null) {
