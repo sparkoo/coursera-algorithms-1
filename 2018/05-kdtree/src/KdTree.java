@@ -74,7 +74,44 @@ public class KdTree {
             return null;
         }
 
-        return root.point;
+        return nearest(root, p, root, Double.MAX_VALUE).point;
+    }
+
+    private Node2d nearest(Node2d current, Point2D p, Node2d nearest, double nearestDistance) {
+        if (current == null) {
+            return nearest;
+        }
+
+        double distance = current.point.distanceTo(p);
+
+        if (distance < nearestDistance) {
+            nearestDistance = distance;
+            nearest = current;
+        }
+
+        if ((current.horizontalSplit && p.x() < current.point.x()) || (!current.horizontalSplit && p.y() < current.point.y())) {
+            Node2d left = nearest(current.left, p, nearest, nearestDistance);
+            if (left.point.distanceTo(p) < nearestDistance) {
+                return left;
+            } else {
+                Node2d right = nearest(current.right, p, nearest, nearestDistance);
+                if (right.point.distanceTo(p) < nearestDistance) {
+                    return right;
+                }
+            }
+        } else {
+            Node2d right = nearest(current.right, p, nearest, nearestDistance);
+            if (right.point.distanceTo(p) < nearestDistance) {
+                return right;
+            } else {
+                Node2d left = nearest(current.left, p, nearest, nearestDistance);
+                if (left.point.distanceTo(p) < nearestDistance) {
+                    return left;
+                }
+            }
+        }
+
+        return nearest;
     }
 
     private static class Node2d {
