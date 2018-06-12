@@ -1,6 +1,8 @@
+import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.Point2D;
 import edu.princeton.cs.algs4.RectHV;
 import java.util.ArrayList;
+import java.util.List;
 
 public class KdTree {
     private Node2d root;
@@ -34,7 +36,7 @@ public class KdTree {
             return new Node2d(p, null, null, horizontalSplit);
         }
 
-        if (horizontalSplit) {
+        if (node.horizontalSplit) {
             if (p.x() < node.point.x()) {
                 node.left = insert(node.left, p, !horizontalSplit);
             } else {
@@ -65,7 +67,44 @@ public class KdTree {
 
     /** all points that are inside the rectangle (or on the boundary) */
     public Iterable<Point2D> range(RectHV rect) {
-        return new ArrayList<Point2D>();
+        List<Point2D> inRangePoints = new ArrayList<>();
+        if (!isEmpty()) {
+            range(root, rect, inRangePoints);
+        }
+        return inRangePoints;
+    }
+
+    private void range(Node2d currentNode, RectHV rect, List<Point2D> inRangePoints) {
+        if (currentNode == null) {
+            return;
+        }
+
+        final boolean both;
+
+        Point2D p = currentNode.point;
+        if (p.x() >= rect.xmin() && p.y() >= rect.ymin() && p.x() <= rect.xmax() && p.y() <= rect.ymax()) {
+            // rect contains point
+            inRangePoints.add(p);
+            both = true;
+        } else if (currentNode.horizontalSplit && p.x() >= rect.xmin() && p.x() <= rect.xmax() ||
+            !currentNode.horizontalSplit && p.y() >= rect.ymin() && p.y() <= rect.ymax()) {
+            // rect intersects with current node
+            both = true;
+        } else {
+            both = false;
+        }
+
+
+        if (both) {
+            range(currentNode.left, rect, inRangePoints);
+            range(currentNode.right, rect, inRangePoints);
+        } else {
+            if ((currentNode.horizontalSplit && p.x() > rect.xmin()) || (!currentNode.horizontalSplit && p.y() > rect.ymin())) {
+                range(currentNode.left, rect, inRangePoints);
+            } else {
+                range(currentNode.right, rect, inRangePoints);
+            }
+        }
     }
 
     /** a nearest neighbor in the set to point p; null if the set is empty */
@@ -74,44 +113,33 @@ public class KdTree {
             return null;
         }
 
-        return nearest(root, p, root, Double.MAX_VALUE).point;
+        return nearest(root, p, root).point;
     }
 
-    private Node2d nearest(Node2d current, Point2D p, Node2d nearest, double nearestDistance) {
-        if (current == null) {
+    private Node2d nearest(Node2d current, Point2D p, Node2d nearest) {
+        if (current == null || nearest.point.distanceTo(p) < current.point.distanceSquaredTo(p)) {
             return nearest;
         }
 
-        double distance = current.point.distanceTo(p);
-
-        if (distance < nearestDistance) {
-            nearestDistance = distance;
+        if (current.point.distanceSquaredTo(p) < nearest.point.distanceSquaredTo(p)) {
             nearest = current;
         }
 
-        if ((current.horizontalSplit && p.x() < current.point.x()) || (!current.horizontalSplit && p.y() < current.point.y())) {
-            Node2d left = nearest(current.left, p, nearest, nearestDistance);
-            if (left.point.distanceTo(p) < nearestDistance) {
-                return left;
-            } else {
-                Node2d right = nearest(current.right, p, nearest, nearestDistance);
-                if (right.point.distanceTo(p) < nearestDistance) {
-                    return right;
-                }
-            }
-        } else {
-            Node2d right = nearest(current.right, p, nearest, nearestDistance);
-            if (right.point.distanceTo(p) < nearestDistance) {
-                return right;
-            } else {
-                Node2d left = nearest(current.left, p, nearest, nearestDistance);
-                if (left.point.distanceTo(p) < nearestDistance) {
-                    return left;
-                }
-            }
+        Node2d left = nearest(current.left, p, nearest);
+        if (left.point.distanceSquaredTo(p) < nearest.point.distanceSquaredTo(p)) {
+            nearest = left;
+        }
+
+        Node2d right = nearest(current.right, p, nearest);
+        if (right.point.distanceSquaredTo(p) < nearest.point.distanceSquaredTo(p)) {
+            nearest = right;
         }
 
         return nearest;
+    }
+
+    private void print() {
+        root.print(0);
     }
 
     private static class Node2d {
@@ -136,10 +164,33 @@ public class KdTree {
                 right.draw();
             }
         }
+
+        private void print(int level) {
+            System.out.println(point + " level: " + level + " horizontalSplit: " + horizontalSplit);
+            if (left != null) {
+                System.out.print("  left of" + point + ": ");
+                left.print(level + 1);
+            }
+            if (right != null) {
+                System.out.print("  right of" + point + ": ");
+                right.print(level + 1);
+            }
+        }
     }
 
     /** unit testing of the methods (optional) */
     public static void main(String[] args) {
+        // initialize the two data structures with point from file
+        String filename = args[0];
+        In in = new In(filename);
+        KdTree kdtree = new KdTree();
+        while (!in.isEmpty()) {
+            double x = in.readDouble();
+            double y = in.readDouble();
+            Point2D p = new Point2D(x, y);
+            kdtree.insert(p);
+        }
 
+        kdtree.print();
     }
 }
