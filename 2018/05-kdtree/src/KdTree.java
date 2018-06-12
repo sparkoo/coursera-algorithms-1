@@ -26,8 +26,10 @@ public class KdTree {
 
     /** add the point to the set (if it is not already in the set) */
     public void insert(Point2D p) {
-        size++;
-        root = insert(root, p, true);
+        if (!contains(p)) {
+            size++;
+            root = insert(root, p, true);
+        }
     }
 
 
@@ -55,7 +57,22 @@ public class KdTree {
 
     /** does the set contain point p? */
     public boolean contains(Point2D p) {
-        return false;
+        return contains(root, p);
+    }
+
+    private boolean contains(Node2d node, Point2D p) {
+        if (node == null) {
+            return false;
+        }
+        if (p.equals(node.point)) {
+            return true;
+        }
+        if (node.horizontalSplit && p.x() < node.point.x() ||
+            !node.horizontalSplit && p.y() < node.point.y()) {
+            return contains(node.left, p);
+        } else {
+            return contains(node.right, p);
+        }
     }
 
     /** draw all points to standard draw */
@@ -117,7 +134,7 @@ public class KdTree {
     }
 
     private Node2d nearest(Node2d current, Point2D p, Node2d nearest) {
-        if (current == null || nearest.point.distanceTo(p) < current.point.distanceSquaredTo(p)) {
+        if (current == null || nearest.point.distanceSquaredTo(p) < current.point.distanceSquaredTo(p)) {
             return nearest;
         }
 
