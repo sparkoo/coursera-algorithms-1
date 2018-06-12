@@ -29,7 +29,7 @@ public class KdTree {
         if (p == null) {
             throw new IllegalArgumentException("point can't be null");
         }
-        if (!contains(p)) {
+        if (root == null || !contains(p)) {
             size++;
             root = insert(root, p, true);
         }
@@ -108,12 +108,12 @@ public class KdTree {
         final boolean both;
 
         Point2D p = currentNode.point;
-        if (p.x() >= rect.xmin() && p.y() >= rect.ymin() && p.x() <= rect.xmax() && p.y() <= rect.ymax()) {
+        if (rect.contains(p)) {
             // rect contains point
             inRangePoints.add(p);
             both = true;
-        } else if (currentNode.horizontalSplit && p.x() >= rect.xmin() && p.x() <= rect.xmax() ||
-            !currentNode.horizontalSplit && p.y() >= rect.ymin() && p.y() <= rect.ymax()) {
+        } else if (currentNode.horizontalSplit && rect.intersects(new RectHV(currentNode.point.x(), 0.0, currentNode.point.x(), 1.0)) ||
+            !currentNode.horizontalSplit && rect.intersects(new RectHV(0.0, currentNode.point.y(), 1.0, currentNode.point.y()))) {
             // rect intersects with current node
             both = true;
         } else {
